@@ -117,7 +117,7 @@ The deployment takes approx. 10 minutes to complete.
 
   ![alt text](images/eap-session-rep.png)
 
-- Note that in the EAP Session Replication page of Load Balancer, the private IP displayed is that of the VM1. When you stop VM1 and click on increment counter, the private IP displayed will be that of VM2.
+- Note that in the EAP Session Replication page of Load Balancer, the private IP displayed is that of the VM1. When you stop VM1 and click on Increment counter, the private IP displayed will be that of VM2 but the session ID remains the same which shows that the session ID got replicated.
 
   ![alt text](images/eap-ses-rep.png)
 

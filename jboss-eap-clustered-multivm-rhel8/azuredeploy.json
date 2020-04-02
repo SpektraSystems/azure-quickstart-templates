@@ -38,38 +38,45 @@
           "description": "User name for the JBOSS EAP."
         }
       },
-        "eapPassword": {
-          "type": "securestring",
-          "minLength": 10,
-          "metadata": {
-            "description": "Password for the JBOSS EAP"
-          }
-        },
-        "rhsmUserName": {
-          "type": "string",
-          "metadata": {
-            "description": "User name for Red Hat subscription manager"
-          }
-        },
-        "rhsmPassword": {
-          "type": "securestring",
-          "metadata": {
-            "description": "Password for Red Hat subscription  manager"
-          }
-        },
-        "rhsmPool": {
-          "type": "string",
-          "metadata": {
-            "description": "Red Hat Subscription Manager Pool"
-          }
-        },
-          "baseUrl": {
-            "type": "string",
-            "metadata": {
-              "description": "Base URL for script extension"
-            },
-            "defaultValue": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/jboss-eap-clustered-multivm-rhel8"
-        },
+      "eapPassword": {
+        "type": "securestring",
+        "minLength": 10,
+        "metadata": {
+          "description": "Password for the JBOSS EAP"
+        }
+      },
+      "rhsmUserName": {
+        "type": "string",
+        "metadata": {
+          "description": "User name for Red Hat subscription manager"
+        }
+      },
+      "rhsmPassword": {
+        "type": "securestring",
+        "metadata": {
+          "description": "Password for Red Hat subscription  manager"
+        }
+      },
+      "rhsmPool": {
+        "type": "string",
+        "metadata": {
+         "description": "Red Hat Subscription Manager Pool"
+        }
+      },
+      "_artifactsLocation": {
+        "type": "string",
+        "metadata": {
+         "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
+       },
+       "defaultValue": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/jboss-eap-clustered-multivm-rhel8/"
+     },
+     "_artifactsLocationSasToken": {
+       "type": "securestring",
+       "metadata": {
+         "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+       },
+       "defaultValue": ""
+     },  
       "jbosseapstrgType": {
         "type": "string",
         "defaultValue": "Standard_LRS",
@@ -437,7 +444,7 @@
               "autoUpgradeMinorVersion": true,
               "settings": {
                 "fileUris": [
-                  "[concat(parameters('baseUrl'),'/scripts/', variables('scriptFileName'))]"
+                  "[concat(parameters('_artifactsLocation'),'scripts/', variables('scriptFileName'), parameters('_artifactsLocationSasToken'))]"
                 ]
               },
               "protectedSettings": {
@@ -512,7 +519,7 @@
               "autoUpgradeMinorVersion": true,
               "settings": {
                 "fileUris": [
-                  "[concat(parameters('baseUrl'),'/scripts/', variables('scriptFileName'))]"
+                  "[concat(parameters('_artifactsLocation'),'/scripts/', variables('scriptFileName'), parameters('_artifactsLocationSasToken'))]"
                 ]
               },
               "protectedSettings": {
