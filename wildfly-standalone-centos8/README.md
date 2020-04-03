@@ -39,7 +39,7 @@ This template creates all of the compute resources to run WildFly 18.0.1.Final o
 - Sample application named dukes deployed on WildFly 18.0.1.Final
 
 Following is the Architecture :
-![alt text](wildfly-arch.png)
+![alt text](images/wildfly-arch.png)
 
 To learn more about WildFly 18.0.0.Final, check out:
 https://docs.wildfly.org/18/
@@ -99,7 +99,7 @@ The deployment takes less than 10 minutes to complete.
 
 - To access the administration console go to **http://<PUBLIC_HOSTNAME>:8080** and click on the link Administration Console:
 
-  ![alt text](images/wildfly_console.png)
+  ![alt text](images/wildfly-console.png)
 
 ## Notes
 
