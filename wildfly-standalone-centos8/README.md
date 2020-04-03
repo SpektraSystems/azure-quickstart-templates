@@ -39,6 +39,7 @@ This template creates all of the compute resources to run WildFly 18.0.1.Final o
 - Sample application named dukes deployed on WildFly 18.0.1.Final
 
 Following is the Architecture :
+
 ![alt text](images/wildfly-arch.png)
 
 To learn more about WildFly 18.0.0.Final, check out:
