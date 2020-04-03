@@ -12,8 +12,8 @@
         "type": "string",
         "defaultValue": "password",
         "allowedValues": [
-          "sshPublicKey",
-          "password"
+          "password",
+          "sshPublicKey"
         ],
         "metadata": {
           "description": "Type of authentication to use on the Virtual Machine."
@@ -126,6 +126,10 @@
       "publicIPAddress2DNSName" : "[concat('pipvm2-', uniqueString(resourceGroup().id))]",
       "publicIPAddressType": "Dynamic",
       "virtualNetworkName": "jbosseap72-vnet",
+      "backendPoolName": "jbosseap-servers",
+      "frontendName" : "LoadBalancerFrontEnd",
+      "healthProbe1" : "eap-lb-health",
+      "healthProbe2" : "eap-jboss-health",
       "linuxConfiguration": {
         "disablePasswordAuthentication": true,
         "ssh": {
@@ -339,7 +343,7 @@
                 },
                 "loadBalancerBackendAddressPools": [
                   {
-                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancersName')), '/backendAddressPools/jbosseap-servers')]"
+                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancersName'), variables('backendPoolName'))]"
                   }
                 ]
               }
@@ -371,7 +375,7 @@
                 },
                 "loadBalancerBackendAddressPools": [
                   {
-                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancersName')), '/backendAddressPools/jbosseap-servers')]"
+                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancersName'), variables('backendPoolName'))]"
                   }
                 ]
               }
@@ -543,7 +547,7 @@
         "properties": {
           "frontendIPConfigurations": [
             {
-              "name": "LoadBalancerFrontEnd",
+              "name": "[variables('frontendName')]",
               "properties": {
                 "privateIPAllocationMethod": "Dynamic",
                 "publicIPAddress": {
@@ -555,7 +559,7 @@
           ],
           "backendAddressPools": [
             {
-              "name": "jbosseap-servers"
+              "name": "[variables('backendPoolName')]"
             }
           ],
           "loadBalancingRules": [
@@ -563,7 +567,7 @@
               "name": "[concat(variables('loadBalancersName'), '-rule1')]",
               "properties": {
                 "frontendIPConfiguration": {
-                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancersName')), '/frontendIPConfigurations/LoadBalancerFrontEnd')]"
+                  "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', variables('loadBalancersName'), variables('frontendName'))]"
                 },
                 "frontendPort": 80,
                 "backendPort": 8080,
@@ -572,10 +576,10 @@
                 "protocol": "Tcp",
                 "enableTcpReset": false,
                 "backendAddressPool": {
-                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancersName')), '/backendAddressPools/jbosseap-servers')]"
+                  "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancersName'), variables('backendPoolName'))]"
                 },
                 "probe": {
-                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancersName')), '/probes/eap-lb-health')]"
+                  "id": "[resourceId('Microsoft.Network/loadBalancers/probes', variables('loadBalancersName'), variables('healthProbe1'))]"
                 }
               }
             },
@@ -583,7 +587,7 @@
                 "name": "[concat(variables('loadBalancersName'), '-rule2')]",
                 "properties": {
                   "frontendIPConfiguration": {
-                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancersName')), '/frontendIPConfigurations/LoadBalancerFrontEnd')]"
+                    "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', variables('loadBalancersName'), variables('frontendName'))]"
                   },
                   "frontendPort": 9990,
                   "backendPort": 9990,
@@ -592,17 +596,17 @@
                   "protocol": "Tcp",
                   "enableTcpReset": false,
                   "backendAddressPool": {
-                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancersName')), '/backendAddressPools/jbosseap-servers')]"
+                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancersName'), variables('backendPoolName'))]"
                   },
                   "probe": {
-                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancersName')), '/probes/eap-jboss-health')]"
+                    "id": "[resourceId('Microsoft.Network/loadBalancers/probes', variables('loadBalancersName'), variables('healthProbe2'))]"
                   }
                 }
               }
           ],
           "probes": [
             {
-              "name": "eap-lb-health",
+              "name": "[variables('healthProbe1')]",
               "properties": {
                 "protocol": "Tcp",
                 "port": 8080,
@@ -611,7 +615,7 @@
               }
             },
             {
-                "name": "eap-jboss-health",
+                "name": "[variables('healthProbe2')]",
                 "properties": {
                   "protocol": "Tcp",
                   "port": 9990,
@@ -623,7 +627,7 @@
         }
       },
       {
-        "name": "[Variables('asName')]",
+        "name": "[variables('asName')]",
         "type": "Microsoft.Compute/availabilitySets",
         "location": "[parameters('location')]",
         "apiVersion": "2019-03-01",
