@@ -44,6 +44,7 @@ This template creates all of the compute resources to run EAP 7.2 cluster on top
 - Storage Account
 
 Following is the Architecture :
+
 ![alt text](images/arch.png)
 
 To learn more about JBoss Enterprise Application Platform, check out:

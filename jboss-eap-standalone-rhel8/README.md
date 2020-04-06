@@ -41,6 +41,7 @@ This template creates all of the compute resources to run JBoss EAP 7.2 on top o
 - Sample application named dukes deployed on JBoss EAP 7.2
 
 Following is the Architecture :
+
 ![alt text](images/rhel-arch.png)
 
 To learn more about JBoss Enterprise Application Platform, check out:
